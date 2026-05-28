@@ -32,8 +32,8 @@ class MusicServices extends getx.GetxService {
   final Map<String, dynamic> _context = {
     'context': {
       'client': {
-        "clientName": "WEB_REMIX",
-        "clientVersion": "1.20230213.01.00",
+        "clientName": "67",
+        "clientVersion": "1.20260524.14.00",
       },
       'user': {}
     }
@@ -662,8 +662,9 @@ class MusicServices extends getx.GetxService {
 
     for (var res in results) {
       String category;
-      if (res['musicShelfRenderer'] != null) {
-        dynamic itemResults = res['musicShelfRenderer']['contents'];
+      if (res['itemSectionRenderer'] != null) {
+        dynamic itemResults = res['itemSectionRenderer']['contents'];
+
         String? typeFilter = filter;
         category = "mixed"; // Just a default value
         final mixedItems = parseSearchResults(itemResults,
@@ -685,7 +686,7 @@ class MusicServices extends getx.GetxService {
           searchResults[category] = parseSearchResults(
               res['musicShelfRenderer']['contents'],
               ['artist', 'playlist', 'song', 'video', 'station'],
-              type,
+              type, 
               category);
         }
         type = typeFilter?.substring(0, typeFilter.length - 1).toLowerCase();
