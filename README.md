@@ -1,10 +1,10 @@
 <div align="center">
 
-# ❗**This repository is no longer maintained.**
+## This is a continuation of Harmony Music by [anandnet](https://github.com/anandnet/Harmony-Music/). I will try to keep the app working as long as I can.
 
 </div>
 
-<img src="https://github.com/anandnet/Harmony-Music/blob/main/cover.png" width="1200" >
+<img src="https://github.com/Bikram-Kumar/Harmony-Music/blob/main/cover.png" width="1200" >
 
 # Harmony Music
 A cross platform app for music streaming made with Flutter(Android, Windows, linux).
@@ -30,12 +30,6 @@ A cross platform app for music streaming made with Flutter(Android, Windows, lin
 * No Advertisment
 * No Login required
 * Piped playlist integration
-
-
-# Download
-* Pleass choose one source for android apk. you won't be able to update from cross build apk source.
-
-<a href="https://github.com/anandnet/Harmony-Music/releases/latest"><img src ="https://github.com/anandnet/Harmony-Music/blob/main/don_github.png" width = "250"></a> <a href= "https://f-droid.org/packages/com.anandnet.harmonymusic"><img src = "https://github.com/anandnet/Harmony-Music/blob/main/down_fdroid.png" width = '250'></a></a> 
 
 # Translation
 <a href="https://hosted.weblate.org/engage/harmony-music/">
