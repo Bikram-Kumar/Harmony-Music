@@ -198,15 +198,21 @@ class Body extends StatelessWidget {
                         final items = homeScreenController
                                 .isContentFetched.value
                             ? [
-                                Obx(() {
-                                  final scrollController = ScrollController();
-                                  homeScreenController.contentScrollControllers
-                                      .add(scrollController);
-                                  return QuickPicksWidget(
-                                      content:
-                                          homeScreenController.quickPicks.value,
-                                      scrollController: scrollController);
-                                }),
+                                // Obx(() {
+                                //   final scrollController = ScrollController();
+                                //   homeScreenController.contentScrollControllers
+                                //       .add(scrollController);
+                                //   return QuickPicksWidget(
+                                //       content:
+                                //           homeScreenController.quickPicks.value,
+                                //       scrollController: scrollController);
+                                // }),
+                                Container(
+                                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
+                                  child: const Text(
+                                    "Harmony Music",
+                                    style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),)
+                                ),
                                 ...getWidgetList(
                                     homeScreenController.middleContent,
                                     homeScreenController),

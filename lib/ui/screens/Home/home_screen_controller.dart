@@ -79,7 +79,7 @@ class HomeScreenController extends GetxController {
           .toList();
       isContentFetched.value = true;
       printINFO("Loaded from offline db");
-      return true;
+      return false;
     } else {
       return false;
     }
@@ -153,9 +153,11 @@ class HomeScreenController extends GetxController {
       if (quickPicks.value.songList.isEmpty) {
         final index = homeContentListMap
             .indexWhere((element) => element['title'] == "Quick picks");
-        final con = homeContentListMap.removeAt(index);
-        quickPicks.value = QuickPicks(List<MediaItem>.from(con["contents"]),
-            title: "Quick picks");
+        if (index >= 0) {
+          final con = homeContentListMap.removeAt(index);
+          quickPicks.value = QuickPicks(List<MediaItem>.from(con["contents"]),
+              title: "Quick picks");
+        }
       }
 
       middleContent.value = _setContentList(middleContentTemp);
