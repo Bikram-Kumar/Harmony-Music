@@ -32,7 +32,7 @@ class MusicServices extends getx.GetxService {
   final Map<String, dynamic> _context = {
     'context': {
       'client': {
-        "clientName": "67",
+        "clientName": "WEB_REMIX",
         "clientVersion": "1.20260524.14.00",
       },
       'user': {}
@@ -59,18 +59,18 @@ class MusicServices extends getx.GetxService {
 
     final appPrefsBox = Hive.box('AppPrefs');
     hlCode = appPrefsBox.get('contentLanguage') ?? "en";
-    if (appPrefsBox.containsKey('visitorId')) {
-      final visitorData = appPrefsBox.get("visitorId");
-      if (visitorData != null && !isExpired(epoch: visitorData['exp'])) {
-        _headers['X-Goog-Visitor-Id'] = visitorData['id'];
-        appPrefsBox.put("visitorId", {
-          'id': visitorData['id'],
-          'exp': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 2590200
-        });
-        printINFO("Got Visitor id ($visitorData['id']) from Box");
-        return;
-      }
-    }
+    // if (appPrefsBox.containsKey('visitorId')) {
+    //   final visitorData = appPrefsBox.get("visitorId");
+    //   if (visitorData != null && !isExpired(epoch: visitorData['exp'])) {
+    //     _headers['X-Goog-Visitor-Id'] = visitorData['id'];
+    //     appPrefsBox.put("visitorId", {
+    //       'id': visitorData['id'],
+    //       'exp': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 2590200
+    //     });
+    //     printINFO("Got Visitor id ($visitorData['id']) from Box");
+    //     // return;
+    //   }
+    // }
 
     final visitorId = await genrateVisitorId();
     if (visitorId != null) {
@@ -93,6 +93,7 @@ class MusicServices extends getx.GetxService {
 
   Future<String?> genrateVisitorId() async {
     try {
+      // printINFO(_headers);
       final response =
           await dio.get(domain, options: Options(headers: _headers));
       final reg = RegExp(r'ytcfg\.set\s*\(\s*({.+?})\s*\)\s*;');
@@ -110,7 +111,7 @@ class MusicServices extends getx.GetxService {
 
   Future<Response> _sendRequest(String action, Map<dynamic, dynamic> data,
       {additionalParams = ""}) async {
-    //print("$baseUrl$action$fixedParms$additionalParams          data:$data");
+    // print("$baseUrl$action$fixedParms$additionalParams \n\n headers: $_headers \n\n data:${jsonEncode(data)}");
     try {
       final response =
           await dio.post("$baseUrl$action$fixedParms$additionalParams",
@@ -589,7 +590,8 @@ class MusicServices extends getx.GetxService {
     final params = getSearchParams(filter, scope, ignoreSpelling);
 
     if (filterParams != null || params != null) {
-      data['params'] = filterParams ?? params;
+      data['params'] = params ?? filterParams;
+    // print(params);
     }
 
     final response = (await _sendRequest("search", data)).data;
@@ -661,15 +663,18 @@ class MusicServices extends getx.GetxService {
     String? type;
 
     for (var res in results) {
+      // printINFO(nav(res, ['musicShelfRenderer','contents',0]));
       String category;
-      if (res['itemSectionRenderer'] != null) {
-        dynamic itemResults = res['itemSectionRenderer']['contents'];
+      if (res['itemSectionRenderer'] != null || res['musicShelfRenderer'] != null) {
 
         String? typeFilter = filter;
         category = "mixed"; // Just a default value
-        final mixedItems = parseSearchResults(itemResults,
-            ['artist', 'playlist', 'song', 'video', 'station'], type, category);
+
         if (filter == null) {
+          dynamic itemResults = res['itemSectionRenderer']['contents'];
+          final mixedItems = parseSearchResults(itemResults,
+              ['artist', 'playlist', 'song', 'video', 'station'], type, category);
+
           for (var item in mixedItems) {
             final itemType = item.runtimeType == MediaItem
                 ? (item.artist.split(",")[0]) + "s"
@@ -682,6 +687,7 @@ class MusicServices extends getx.GetxService {
             }
           }
         } else {
+          // printINFO(8);
           category = nav(res, ['musicShelfRenderer', ...title_text]);
           searchResults[category] = parseSearchResults(
               res['musicShelfRenderer']['contents'],
@@ -702,6 +708,7 @@ class MusicServices extends getx.GetxService {
         parseFunc(contents) => parseSearchResults(contents,
             ['artist', 'playlist', 'song', 'video', 'station'], type, category);
 
+          // print(category);
         if (searchResults.containsKey(category)) {
           final x = await getContinuations(
               res['musicShelfRenderer'],
@@ -710,7 +717,6 @@ class MusicServices extends getx.GetxService {
               requestFunc,
               parseFunc,
               isAdditionparamReturnReq: true);
-
           searchResults["params"] = {
             'data': data,
             "type": type,

@@ -185,7 +185,7 @@ String? getSearchParams(String? filter, String? scope, bool ignoreSpelling) {
       param1 = filteredParam1;
       param2 = _getParam2(filter);
       if (!ignoreSpelling) {
-        param3 = 'AWoMEA4QChADEAQQCRAF';
+        param3 = 'AWoSEAQQAxAFEAkQChAOEBUQEBAR';
       } else {
         param3 = 'AUICCAFqDBAOEAoQAxAEEAkQBQ%3D%3D';
       }
