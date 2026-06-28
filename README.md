@@ -13,6 +13,8 @@ A cross platform app for music streaming made with Flutter(Android, Windows, lin
 
 <a href="https://github.com/Bikram-Kumar/Harmony-Music/releases/v1.13.0"><img src ="https://github.com/Bikram-Kumar/Harmony-Music/blob/main/don_github.png" width = "250"></a> 
 
+## Please use the [Discussions page](https://github.com/Bikram-Kumar/Harmony-Music/discussions) for any help or discussions with other members in the community.
+
 
 # Features
 * Ability to play song from Ytube/Ytube Music.
