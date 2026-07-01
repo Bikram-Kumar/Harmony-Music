@@ -671,7 +671,10 @@ class MusicServices extends getx.GetxService {
         category = "mixed"; // Just a default value
 
         if (filter == null) {
-          dynamic itemResults = res['itemSectionRenderer']['contents'];
+          List<dynamic> itemResults = res['itemSectionRenderer']['contents'];
+
+          if (itemResults.isNotEmpty && itemResults[0]['musicResponsiveListItemRenderer'] == null) continue;
+
           final mixedItems = parseSearchResults(itemResults,
               ['artist', 'playlist', 'song', 'video', 'station'], type, category);
 
@@ -688,6 +691,8 @@ class MusicServices extends getx.GetxService {
           }
         } else {
           // printINFO(8);
+          if (res['itemSectionRenderer'] != null) continue;
+
           category = nav(res, ['musicShelfRenderer', ...title_text]);
           searchResults[category] = parseSearchResults(
               res['musicShelfRenderer']['contents'],
