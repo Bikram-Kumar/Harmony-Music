@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmony Music | Ad-Free Music Streaming</title>
+    
+    
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Bikram-Kumar/Harmony-Music/main/assets/icons/icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #00d2d3;
+            --secondary: #01a3a4;
+            --primary-glow: rgba(0, 210, 211, 0.4);
+            
+            --bg-black: #000000;
+            --bg-card: #0c0c0c;
+            --text-light: #ffffff;
+            --text-muted: #a0a0a0;
+            --border-color: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo img {
+            height: 36px;
+            width: 36px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .github-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .github-link:hover {
+            color: var(--primary);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 10rem 5%;
+            min-height: 90vh;
+            justify-content: center;
+            position: relative;
+            
+            background: linear-gradient(
+                to bottom, 
+                rgba(0, 0, 0, 0.4) 0%, 
+                rgba(0, 0, 0, 0.9) 80%, 
+                var(--bg-black) 100%
+            ), 
+            url('https://raw.githubusercontent.com/Bikram-Kumar/Harmony-Music/main/cover.png') center center / cover no-repeat;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #d0d0d0;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .btn {
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--bg-black);
+            background: var(--primary);
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            z-index: 2;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--primary-glow);
+            background: #ffffff;
+        }
+
+        /* --- Features Section --- */
+        .features {
+            padding: 5rem 5% 8rem 5%;
+            background-color: var(--bg-black);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .features-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .features-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            font-size: 1.1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: left;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 210, 211, 0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            background: rgba(0, 210, 211, 0.1);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 3rem 5%;
+            background: #050505;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s ease;
+        }
+        
+        footer a:hover {
+            opacity: 0.8;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            .hero {
+                padding: 8rem 5% 6rem 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <img src="https://raw.githubusercontent.com/Bikram-Kumar/Harmony-Music/main/assets/icons/icon.png" alt="Harmony Music Logo">
+            Harmony Music
+        </a>
+        <a href="https://github.com/Bikram-Kumar/Harmony-Music" target="_blank" class="github-link">
+            <i class="fab fa-github"></i> GitHub
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Unlimited Music<br>Zero Ads</h1>
+        <p>A beautifully designed, completely ad-free music streaming app backed by the YT Music API. Now actively maintained and open-source.</p>
+        <a href="https://github.com/Bikram-Kumar/Harmony-Music/releases/latest" class="btn" target="_blank">
+            <i class="fab fa-android"></i> Download APK
+        </a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2 class="features-title">Core Features</h2>
+        <p class="features-subtitle">Everything you need, nothing you don't.</p>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Ad-Free Experience</h3>
+                <p>Listen to your favorite songs continuously without ever being interrupted by audio or visual advertisements.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-download"></i></div>
+                <h3>Offline Playback</h3>
+                <p>Download tracks and playlists directly to your device. Save data and listen anywhere, even without an internet connection.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-microphone-alt"></i></div>
+                <h3>Synchronized Lyrics</h3>
+                <p>Sing along with real-time, synchronized lyrics support built directly into the stunning player UI.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-palette"></i></div>
+                <h3>Material 3 Design</h3>
+                <p>A gorgeous, modern user interface featuring dynamic theming that adapts to your album art and system colors.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-database"></i></div>
+                <h3>YT Music Library</h3>
+                <p>Access the entire YouTube Music catalog. If a song, album, or playlist exists there, you can stream it here.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-code"></i></div>
+                <h3>Open Source</h3>
+                <p>100% Free and Open Source. Transparent code tracked and maintained openly by the community.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Harmony Music. A FOSS project based on the work of anandnet.</p>
+        <p>Maintained by the Community.</p>
+    </footer>
+
+</body>
+  </html>
