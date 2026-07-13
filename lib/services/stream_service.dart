@@ -1,5 +1,9 @@
 import 'dart:io';
+import 'package:get/get.dart';
+import 'package:harmonymusic/ui/screens/Settings/settings_screen_controller.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+
+import '../utils/helper.dart';
 
 class StreamProvider {
   final bool playable;
@@ -63,6 +67,59 @@ class StreamProvider {
     }
   }
 
+
+  static Future<void> downloadSong(String filePath, String songId, dynamic onProgress) async {
+    final settingsScreenController = Get.find<SettingsScreenController>();
+    final downloadingFormat = settingsScreenController.downloadingFormat.string;
+    var yt = YoutubeExplode();
+
+    try {
+      var manifest = await yt.videos.streamsClient.getManifest(songId);
+      
+      var audioStreamInfo = downloadingFormat == "opus" ?
+          manifest.audioOnly.firstWhere(
+            (stream) => stream.tag == 251 || stream.tag == 250,   
+            orElse: () => manifest.audioOnly.withHighestBitrate(),
+          ) 
+        : 
+          manifest.audioOnly.firstWhere(
+            (stream) => stream.tag == 140 || stream.tag == 139,   
+            orElse: () => manifest.audioOnly.withHighestBitrate(),
+          ) 
+      ;
+
+      var stream = yt.videos.streamsClient.get(audioStreamInfo);
+
+      var totalBytes = audioStreamInfo.size.totalBytes;
+
+      var file = File(filePath);
+      var fileStream = file.openWrite();
+      int downloaded = 0;
+
+      await for (var data in stream) {
+        fileStream.add(data);
+        
+        downloaded += data.length;
+
+        double progress = downloaded / totalBytes;
+
+        onProgress((progress * 100).toInt());  // passes percentage
+        
+        
+    }
+
+      await fileStream.flush();
+      await fileStream.close();
+      printINFO('Download completed successfully!');
+
+    } catch(e) {
+      print(e);
+      rethrow;
+    } finally {
+      yt.close();
+    }
+
+  }
   Audio? get highestQualityAudio =>
       audioFormats?.lastWhere((item) => item.itag == 251 || item.itag == 140,
           orElse: () => audioFormats!.first);
