@@ -669,7 +669,7 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () {
                       launchUrl(
                         Uri.parse(
-                          'https://github.com/anandnet/Harmony-Music',
+                          'https://github.com/Bikram-Kumar/Harmony-Music',
                         ),
                         mode: LaunchMode.externalApplication,
                       );
@@ -695,7 +695,7 @@ class SettingsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 20.0),
             child: Text(
-              "${settingsController.currentVersion} ${"by".tr} anandnet",
+              settingsController.currentVersion,
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
