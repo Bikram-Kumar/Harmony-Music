@@ -242,6 +242,7 @@ MediaItem parseSong(Map<dynamic, dynamic> result) {
     'thumbnails': nav(result, thumbnail_renderer),
   };
 
+  print(song['videoId']);
   song.addAll(parseSongRuns(result['subtitle']['runs']));
   return MediaItemBuilder.fromJson(song);
 }

@@ -544,12 +544,14 @@ class MyAudioHandler extends BaseAudioHandler with GetxServiceMixin {
       case 'setSourceNPlay':
         final currMed = (extras!['mediaItem'] as MediaItem);
         final futureStreamInfo = checkNGetUrl(currMed.id);
+        print(9);
         isSongLoading = true;
         currentIndex = 0;
         await _playList.clear();
         mediaItem.add(currMed);
         queue.add([currMed]);
         final streamInfo = (await futureStreamInfo);
+        printINFO(streamInfo.statusMSG);
         if (!streamInfo.playable) {
           currentSongUrl = null;
           isSongLoading = false;
@@ -790,8 +792,8 @@ class MyAudioHandler extends BaseAudioHandler with GetxServiceMixin {
         cacheAudioPlaceholder = Audio(
             audioCodec: Codec.mp4a,
             bitrate: 0,
-            loudnessDb: 0,
-            duration: 0,
+            // loudnessDb: 0,
+            // duration: 0,
             size: 0,
             url: "file://$_cacheDir/cachedSongs/$songId.mp3",
             itag: 0);
@@ -814,8 +816,8 @@ class MyAudioHandler extends BaseAudioHandler with GetxServiceMixin {
             itag: 140,
             audioCodec: Codec.mp4a,
             bitrate: 0,
-            duration: 0,
-            loudnessDb: 0,
+            // duration: 0,
+            // loudnessDb: 0,
             url: path,
             size: 0);
       }
@@ -855,6 +857,7 @@ class MyAudioHandler extends BaseAudioHandler with GetxServiceMixin {
         final token = RootIsolateToken.instance;
         final streamInfoJson =
             await Isolate.run(() => getStreamInfo(songId, token));
+        print(streamInfoJson);
         streamInfo = HMStreamingData.fromJson(streamInfoJson);
         if (streamInfo.playable) songsUrlCacheBox.put(songId, streamInfoJson);
       }

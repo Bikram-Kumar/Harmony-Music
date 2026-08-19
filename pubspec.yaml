@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.13.3+2
+version: 1.13.4+2
 
 environment:
   sdk: ">=3.1.5 <4.0.0"
@@ -45,7 +45,7 @@ dependencies:
   flutter_lyric: ^2.0.4+6
   flutter_slidable: ^3.1.2
   get: ^4.7.1
-  google_fonts: ^6.1.0
+  google_fonts: ^6.2.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   html: ^0.15.6
@@ -82,8 +82,10 @@ dependencies:
   window_manager: ^0.4.2
   youtube_explode_dart:
     git:
-      url: https://github.com/anandnet/youtube_explode_dart.git
-      ref: 1d9ec9baa806705b1d859260eeb389ec28c6b024
+      url: https://github.com/Bikram-Kumar/youtube_explode_dart.git
+      branch: master
+      ref: 75b220dbc8242362cd8c7990f035594a24876ba5
+  
 dev_dependencies:
 
   # The "flutter_lints" package below contains a set of recommended lints to
