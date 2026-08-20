@@ -1316,8 +1316,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "75b220dbc8242362cd8c7990f035594a24876ba5"
-      resolved-ref: "75b220dbc8242362cd8c7990f035594a24876ba5"
+      ref: "6f28a8bf0f00c1ef7073c335bafe48f8bab05edc"
+      resolved-ref: "6f28a8bf0f00c1ef7073c335bafe48f8bab05edc"
       url: "https://github.com/Bikram-Kumar/youtube_explode_dart.git"
     source: git
     version: "3.1.0"

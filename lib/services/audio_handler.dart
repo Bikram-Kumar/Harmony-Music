@@ -544,7 +544,6 @@ class MyAudioHandler extends BaseAudioHandler with GetxServiceMixin {
       case 'setSourceNPlay':
         final currMed = (extras!['mediaItem'] as MediaItem);
         final futureStreamInfo = checkNGetUrl(currMed.id);
-        print(9);
         isSongLoading = true;
         currentIndex = 0;
         await _playList.clear();
