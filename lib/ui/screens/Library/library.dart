@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:harmonymusic/services/song_importer.dart';
+import 'package:harmonymusic/ui/player/player_controller.dart';
 
 import '/ui/widgets/modification_list.dart';
 import '../../../models/playlist.dart';
@@ -65,17 +67,46 @@ class SongsLibraryWidget extends StatelessWidget {
             return controller.librarySongsList.isNotEmpty
                 ? (controller.additionalOperationMode.value ==
                         OperationMode.none
-                    ? ListWidget(
-                        controller.librarySongsList,
-                        "library Songs",
-                        true,
-                        isPlaylistOrAlbum: true,
-                        playlist: Playlist(
-                            title: "Library Songs",
-                            playlistId: "SongsDownloads",
-                            thumbnailUrl: "",
-                            isCloudPlaylist: false),
-                      )
+                    ? Expanded(
+                      child: Stack(
+                        children: [
+                          ListWidget(
+                              controller.librarySongsList,
+                              "library Songs",
+                              true,
+                              isPlaylistOrAlbum: true,
+                              playlist: Playlist(
+                                  title: "Library Songs",
+                                  playlistId: "SongsDownloads",
+                                  thumbnailUrl: "",
+                                  isCloudPlaylist: false),
+                            ),
+                      
+                            GetX<PlayerController>(
+                              builder: (playerController) {
+                                return Container(
+                                  margin: ((playerController.currentSong.value != null) ? const EdgeInsets.only(bottom: 96): const EdgeInsets.all(0)),
+                                  padding: const EdgeInsets.all(20.0),
+                                  alignment: Alignment.bottomRight,
+                                  child: SizedBox(
+                                    width: 60,
+                                    height: 60,
+                                    child: FloatingActionButton(
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+                                      onPressed: () {
+                                        SongImporter.importSong();
+                                      },
+                                      child: const Icon(Icons.archive)),
+                                  ),
+                                );
+                              }
+                            )
+                      
+                      
+                        ],
+                      ),
+                    )
                     : ModificationList(
                         mode: controller.additionalOperationMode.value,
                         screenController: controller,

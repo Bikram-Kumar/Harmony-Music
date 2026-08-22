@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../screens/Settings/settings_screen_controller.dart';
@@ -51,7 +52,7 @@ class ImageWidget extends StatelessWidget {
 
     /// only valid for offline songs
     final bool offlineAvailable =
-        song != null && (song?.extras?["url"] ?? "").contains("file");
+        song != null && Hive.box('SongDownloads').containsKey(song!.id);
 
     return Container(
       height: size,

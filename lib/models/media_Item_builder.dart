@@ -1,11 +1,17 @@
 // ignore_for_file: file_names
 
 import 'package:audio_service/audio_service.dart';
+import 'package:harmonymusic/utils/helper.dart';
+import 'package:hive/hive.dart';
 import '../models/thumbnail.dart';
 
 class MediaItemBuilder {
   static MediaItem fromJson(dynamic json, {String? url}) {
     String? artistName;
+
+    // Hive.box("SongDownloads").delete('imported_1787400045639');
+    // printINFO(json);
+
     if (json['artists'] != null) {
       artistName =
           json['artists']?.map((e) => e['name']).toList().join(', ').toString();

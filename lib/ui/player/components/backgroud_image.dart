@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:harmonymusic/utils/helper.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import '../../screens/Settings/settings_screen_controller.dart';
 import '../../utils/theme_controller.dart';
@@ -21,9 +23,9 @@ class BackgroudImage extends StatelessWidget {
         child: playerController.currentSong.value != null
 
             /// if song is local then return image from local file
-            ? (playerController.currentSong.value!.extras!['url'] ?? '')
-                    .contains('file')
+            ? (Hive.box('SongDownloads').containsKey(playerController.currentSong.value!.id))
                 ? Builder(builder: (context) {
+                  
                     final imgFile = File(
                         "${Get.find<SettingsScreenController>().supportDirPath}/thumbnails/${playerController.currentSong.value!.id}.png");
                     return FutureBuilder(
