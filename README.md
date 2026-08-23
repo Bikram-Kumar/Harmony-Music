@@ -18,6 +18,7 @@ A cross platform app for music streaming made with Flutter(Android, Windows, lin
 
 # Features
 * Ability to play song from Ytube/Ytube Music.
+* Import and play local songs.
 * Song cache while playing
 * Radio feature support
 * Background music
