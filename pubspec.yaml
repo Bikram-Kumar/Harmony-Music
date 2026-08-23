@@ -43,7 +43,11 @@ dependencies:
     sdk: flutter
   flutter_keyboard_visibility: ^6.0.0
   flutter_lyric: ^2.0.4+6
-  flutter_media_metadata: ^1.0.0
+  flutter_media_metadata:
+    git:
+      url: https://github.com/Bikram-Kumar/flutter_media_metadata.git
+      branch: master
+      ref: 7666c7b40f3d9281f1d766f885ecd17b19177901
   flutter_slidable: ^3.1.2
   get: ^4.7.1
   google_fonts: ^6.2.0

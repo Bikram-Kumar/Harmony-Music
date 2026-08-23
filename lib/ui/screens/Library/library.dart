@@ -70,17 +70,21 @@ class SongsLibraryWidget extends StatelessWidget {
                     ? Expanded(
                       child: Stack(
                         children: [
-                          ListWidget(
-                              controller.librarySongsList,
-                              "library Songs",
-                              true,
-                              isPlaylistOrAlbum: true,
-                              playlist: Playlist(
-                                  title: "Library Songs",
-                                  playlistId: "SongsDownloads",
-                                  thumbnailUrl: "",
-                                  isCloudPlaylist: false),
-                            ),
+                          Column(
+                            children: [
+                              ListWidget(
+                                  controller.librarySongsList,
+                                  "library Songs",
+                                  true,
+                                  isPlaylistOrAlbum: true,
+                                  playlist: Playlist(
+                                      title: "Library Songs",
+                                      playlistId: "SongsDownloads",
+                                      thumbnailUrl: "",
+                                      isCloudPlaylist: false),
+                                ),
+                            ],
+                          ),
                       
                             GetX<PlayerController>(
                               builder: (playerController) {

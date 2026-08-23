@@ -69,6 +69,12 @@ class ImageWidget extends StatelessWidget {
               height: size,
               width: size,
               fit: BoxFit.cover,
+              errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                  return Image.asset(
+                    'assets/icons/song.png',
+                    fit: BoxFit.cover,
+                  );
+              }
             )
           : CachedNetworkImage(
               height: size,

@@ -20,9 +20,9 @@ class SongImporter {
   static Future<void> importSong() async {
     Completer<void> complete = Completer();
 
+    List<String> allowedExtensions = ['mp3', 'm4a', 'wav', 'opus', 'flac', 'aac', 'ogg', 'wma'];
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['mp3', 'm4a', 'wav', 'opus'],
+      type: FileType.any,
       dialogTitle: 'importSong'.tr, 
     );
 
@@ -36,6 +36,19 @@ class SongImporter {
 
     if (originalFilePath == null) {
       complete.complete();
+      return complete.future;
+    }
+
+    if (!allowedExtensions.contains(pickedFile.extension)) {
+      ScaffoldMessenger.of(Get.context!).showSnackBar(snackbar(
+          Get.context!, 
+          "Invalid file type. Choose only $allowedExtensions", 
+          size: SanckBarSize.BIG,
+          duration: const Duration(seconds: 5),
+          top: !GetPlatform.isDesktop));
+      
+      complete.complete();
+
       return complete.future;
     }
 
@@ -82,6 +95,8 @@ class SongImporter {
         } catch (e) {
           printERROR("Failed to save thumbnail: $e");
         }
+      } else {
+        artUri = Uri.parse("https://raw.githubusercontent.com/Bikram-Kumar/Harmony-Music/refs/heads/main/assets/icons/song.png");
       }
 
 
