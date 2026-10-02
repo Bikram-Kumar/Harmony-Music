@@ -553,16 +553,14 @@ class LibraryPlaylistsController extends GetxController
       // Refresh library to show the new playlist
       refreshLib();
 
-      // Show success message
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          snackbar(
-            context,
-            "${"playlistImportedMsg".tr}: ${newPlaylist.title}",
-            size: SanckBarSize.MEDIUM,
-          ),
-        );
-      }
+      ScaffoldMessenger.of(Get.context!).showSnackBar(snackbar(
+          Get.context!, 
+          "Playlist imported successfully", 
+          size: SanckBarSize.BIG,
+          duration: const Duration(seconds: 2),
+          top: !GetPlatform.isDesktop)
+      );
+      
     } catch (e) {
       // Close progress dialog if it's still open
       if (Get.isDialogOpen ?? false) {
@@ -582,10 +580,13 @@ class LibraryPlaylistsController extends GetxController
         errorMsg = "importErrorDatabase".tr;
       }
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            snackbar(context, errorMsg, size: SanckBarSize.MEDIUM));
-      }
+      ScaffoldMessenger.of(Get.context!).showSnackBar(snackbar(
+          Get.context!, 
+          errorMsg, 
+          size: SanckBarSize.BIG,
+          duration: const Duration(seconds: 2),
+          top: !GetPlatform.isDesktop)
+      );
     } finally {
       isImporting.value = false;
       importProgress.value = 0.0;
