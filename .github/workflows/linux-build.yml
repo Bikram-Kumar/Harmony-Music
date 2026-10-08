@@ -1,0 +1,238 @@
+name: Linux Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    env:
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.6'
+          channel: stable
+          cache: true
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang \
+            cmake \
+            ninja-build \
+            pkg-config \
+            libgtk-3-dev \
+            libstdc++-12-dev \
+            libayatana-appindicator3-dev \
+            libmediainfo-dev \
+            openjdk-17-jdk \
+            dpkg-dev \
+            fuse3 \
+            file \
+            wget
+
+      - name: Fix compatibility
+        run: |
+          sed -i 's/ionicons: \^0\.2\.2/ionicons: ^0.2.3/' pubspec.yaml
+
+          sed -i 's/Ionicons\.logo_youtube/Icons.ondemand_video/g' \
+            lib/ui/widgets/songinfo_bottom_sheet.dart
+
+          sed -i 's/Ionicons\.play_circle/Icons.play_circle_outline/g' \
+            lib/ui/widgets/songinfo_bottom_sheet.dart
+
+      - name: Configure Java and JNI
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME" >> "$GITHUB_ENV"
+          echo "JAVA_INCLUDE_PATH=$JAVA_HOME/include" >> "$GITHUB_ENV"
+          echo "JAVA_INCLUDE_PATH2=$JAVA_HOME/include/linux" >> "$GITHUB_ENV"
+          echo "JAVA_JVM_LIBRARY=$JAVA_HOME/lib/server/libjvm.so" >> "$GITHUB_ENV"
+
+      - name: Configure compiler
+        run: |
+          echo "CXXFLAGS=-Wno-error=unused-but-set-variable" >> "$GITHUB_ENV"
+          echo "CFLAGS=-Wno-error=unused-but-set-variable" >> "$GITHUB_ENV"
+
+      - name: Flutter clean
+        run: flutter clean
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build Linux
+        run: flutter build linux --release -v
+
+      - name: Show build files
+        run: |
+          echo "Build output:"
+          find build/linux -maxdepth 5 -type f | head -100
+
+      # ==========================================
+      # DEB PACKAGE
+      # ==========================================
+
+      - name: Create DEB package
+        run: |
+          set -e
+
+          VERSION="1.0.0"
+          PACKAGE="harmony-music"
+          ROOT="deb/${PACKAGE}_${VERSION}_amd64"
+
+          rm -rf deb
+
+          mkdir -p "$ROOT/opt/harmony-music"
+          mkdir -p "$ROOT/usr/share/applications"
+          mkdir -p "$ROOT/DEBIAN"
+
+          # Flutter Linux bundle
+          cp -a build/linux/x64/release/bundle/. \
+            "$ROOT/opt/harmony-music/"
+
+          # DEB control file
+          cat > "$ROOT/DEBIAN/control" <<EOF
+          Package: harmony-music
+          Version: ${VERSION}
+          Section: sound
+          Priority: optional
+          Architecture: amd64
+          Maintainer: ANIL UYANIK
+          Depends: libmediainfo0v5, libayatana-appindicator3-1, libgtk-3-0, dbus-daemon
+          Description: Harmony Music
+           Harmony Music Linux desktop application.
+          EOF
+
+          # Desktop launcher
+          cat > "$ROOT/usr/share/applications/harmony-music.desktop" <<EOF
+          [Desktop Entry]
+          Name=Harmony Music
+          Comment=Music player
+          Exec=dbus-run-session -- /opt/harmony-music/harmonymusic
+          Terminal=false
+          Type=Application
+          Categories=AudioVideo;Audio;
+          StartupNotify=true
+          EOF
+
+          chmod 755 "$ROOT/opt/harmony-music/harmonymusic"
+          chmod 644 "$ROOT/usr/share/applications/harmony-music.desktop"
+
+          # Build DEB
+          dpkg-deb --build --root-owner-group "$ROOT"
+
+          echo "DEB package:"
+          ls -lh deb/
+
+      # ==========================================
+      # APPIMAGE PACKAGE
+      # ==========================================
+
+      - name: Create AppImage
+        run: |
+          set -e
+
+          VERSION="1.0.0"
+          APPDIR="AppDir"
+
+          rm -rf "$APPDIR"
+
+          mkdir -p "$APPDIR/usr/bin"
+          mkdir -p "$APPDIR/usr/lib"
+          mkdir -p "$APPDIR/usr/share/applications"
+
+          # Flutter application
+          cp -a build/linux/x64/release/bundle/. \
+            "$APPDIR/usr/bin/"
+
+          # MediaInfo library
+          cp -L /usr/lib/x86_64-linux-gnu/libmediainfo.so.0* \
+            "$APPDIR/usr/lib/" || true
+
+          # AppImage icon
+          cat > "$APPDIR/harmony-music.svg" <<'EOF'
+          <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+            <rect width="256" height="256" rx="48" fill="#202124"/>
+            <circle cx="128" cy="128" r="82" fill="#4285F4"/>
+            <path d="M105 78v91.5a25 25 0 1 0 18 24V119l62-18v55.5a25 25 0 1 0 18 24V64z"
+                  fill="white"/>
+          </svg>
+          EOF
+
+          # AppImage desktop file
+          cat > "$APPDIR/harmony-music.desktop" <<'EOF'
+          [Desktop Entry]
+          Name=Harmony Music
+          Comment=Music player
+          Exec=harmony-music
+          Icon=harmony-music
+          Terminal=false
+          Type=Application
+          Categories=AudioVideo;Audio;
+          StartupNotify=true
+          EOF
+
+          cp "$APPDIR/harmony-music.desktop" \
+            "$APPDIR/usr/share/applications/harmony-music.desktop"
+
+          # AppRun
+          cat > "$APPDIR/AppRun" <<'EOF'
+          #!/bin/sh
+
+          HERE="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+
+          export LD_LIBRARY_PATH="$HERE/usr/lib:$HERE/usr/bin/lib:$LD_LIBRARY_PATH"
+
+          exec dbus-run-session -- "$HERE/usr/bin/harmonymusic" "$@"
+          EOF
+
+          chmod +x "$APPDIR/AppRun"
+
+          # Download appimagetool
+          wget -q \
+            https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage \
+            -O appimagetool
+
+          chmod +x appimagetool
+
+          # Build AppImage
+          ./appimagetool "$APPDIR" \
+            "Harmony-Music-${VERSION}-x86_64.AppImage"
+
+          chmod +x "Harmony-Music-${VERSION}-x86_64.AppImage"
+
+          # Check AppImage
+          file "Harmony-Music-${VERSION}-x86_64.AppImage"
+          ls -lh "Harmony-Music-${VERSION}-x86_64.AppImage"
+
+      # ==========================================
+      # UPLOAD ARTIFACTS
+      # ==========================================
+
+      - name: Upload Linux build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Harmony-Music-Linux
+          path: build/linux/x64/release/bundle/
+          if-no-files-found: error
+
+      - name: Upload DEB package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Harmony-Music-DEB
+          path: deb/*.deb
+          if-no-files-found: error
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: Harmony-Music-AppImage
+          path: Harmony-Music-*.AppImage
+          if-no-files-found: error
