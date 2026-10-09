@@ -22,6 +22,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang cmake git ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev libayatana-appindicator3-dev
 
+
+      - name: Fix compatibility
+        run: |
+          sed -i 's/ionicons: \^0\.2\.2/ionicons: ^0.2.3/' pubspec.yaml
+
+          sed -i 's/Ionicons\.logo_youtube/Icons.ondemand_video/g' \
+            lib/ui/widgets/songinfo_bottom_sheet.dart
+
+          sed -i 's/Ionicons\.play_circle/Icons.play_circle_outline/g' \
+            lib/ui/widgets/songinfo_bottom_sheet.dart
+
+
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
