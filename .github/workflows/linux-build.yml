@@ -171,5 +171,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Harmony-Music-AppImage
-          path: *.AppImage
+          path: |
+            *.AppImage
           if-no-files-found: error
