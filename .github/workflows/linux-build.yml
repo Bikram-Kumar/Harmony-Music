@@ -145,10 +145,31 @@ jobs:
           # 7. Run appimagetool (using extract-and-run because GitHub runner lacks FUSE support)
           ./appimagetool-x86_64.AppImage --appimage-extract-and-run $APPDIR ${APP_NAME}-x86_64.AppImage
 
-      - name: Upload Build Artifacts
+      # - name: Upload Build Artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: linux-packages
+      #     path: |
+      #       build/debian/*.deb
+      #       *.AppImage
+
+      - name: Upload Linux build
         uses: actions/upload-artifact@v4
         with:
-          name: linux-packages
-          path: |
-            build/debian/*.deb
-            *.AppImage
+          name: Harmony-Music-Linux
+          path: build/linux/x64/release/bundle/
+          if-no-files-found: error
+
+      - name: Upload DEB package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Harmony-Music-DEB
+          path: build/debian/*.deb
+          if-no-files-found: error
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: Harmony-Music-AppImage
+          path: *.AppImage
+          if-no-files-found: error
