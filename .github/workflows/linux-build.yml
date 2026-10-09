@@ -33,7 +33,10 @@ jobs:
           sed -i 's/Ionicons\.play_circle/Icons.play_circle_outline/g' \
             lib/ui/widgets/songinfo_bottom_sheet.dart
 
-
+      - name: Configure compiler
+        run: |
+          echo "CXXFLAGS=-Wno-error=unused-but-set-variable" >> "$GITHUB_ENV"
+          echo "CFLAGS=-Wno-error=unused-but-set-variable" >> "$GITHUB_ENV"
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
