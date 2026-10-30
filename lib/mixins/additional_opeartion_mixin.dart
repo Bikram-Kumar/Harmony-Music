@@ -1,4 +1,4 @@
-import 'package:audio_service/audio_service.dart' show MediaItem;
+﻿import 'package:audio_service/audio_service.dart' show MediaItem;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:harmonymusic/base_class/playlist_album_screen_con_base.dart';
@@ -29,9 +29,12 @@ mixin AdditionalOpeartionMixin on PlaylistAlbumScreenControllerBase {
 
   @override
   void onSearch(String value, String? tag) {
+    final query = value.toLowerCase();
     final songlist = tempListContainer
         .where((element) =>
-            element.title.toLowerCase().contains(value.toLowerCase()))
+            element.title.toLowerCase().contains(query) ||
+            (element.artist?.toLowerCase().contains(query) ?? false) ||
+            (element.album?.toLowerCase().contains(query) ?? false))
         .toList();
     songList.value = songlist;
   }
