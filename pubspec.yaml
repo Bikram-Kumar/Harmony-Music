@@ -103,6 +103,9 @@ dev_dependencies:
     sdk: flutter
   jnigen: ^0.14.0
 
+dependency_overrides:
+  path: 1.9.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
