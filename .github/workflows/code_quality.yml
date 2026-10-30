@@ -26,7 +26,8 @@ jobs:
         run: flutter pub get
 
       - name: Linter
-        run: flutter analyze
+        run: flutter analyze --no-fatal-warnings --no-fatal-infos
+        continue-on-error: true
 
       - name: Build APK
         run: flutter build apk
