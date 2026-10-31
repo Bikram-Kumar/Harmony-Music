@@ -50,7 +50,7 @@ dependencies:
       ref: 7666c7b40f3d9281f1d766f885ecd17b19177901
   flutter_slidable: ^3.1.2
   get: ^4.7.1
-  google_fonts: ^6.2.1
+  google_fonts: ^8.2.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   html: ^0.15.6
@@ -102,10 +102,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   jnigen: ^0.14.0
-
-dependency_overrides:
-  path: 1.9.0
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

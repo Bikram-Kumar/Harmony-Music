@@ -10,15 +10,15 @@ jobs:
     name: Check the source code quality
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          flutter-version: '3.24.5'
+          flutter-version: '3.24.2'
 
       - name: Setup JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -27,14 +27,13 @@ jobs:
         run: flutter pub get
 
       - name: Linter
-        run: flutter analyze --no-fatal-warnings --no-fatal-infos
-        continue-on-error: true
+        run: flutter analyze
 
       - name: Build APK
-        run: flutter build apk --android-skip-build-dependency-validation
+        run: flutter build apk
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: apk-release
           path: build/app/outputs/flutter-apk/app-release.apk
