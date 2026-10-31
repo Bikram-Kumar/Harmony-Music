@@ -29,9 +29,12 @@ mixin AdditionalOpeartionMixin on PlaylistAlbumScreenControllerBase {
 
   @override
   void onSearch(String value, String? tag) {
+    final query = value.toLowerCase();
     final songlist = tempListContainer
         .where((element) =>
-            element.title.toLowerCase().contains(value.toLowerCase()))
+            element.title.toLowerCase().contains(query) ||
+            (element.artist?.toLowerCase().contains(query) ?? false) ||
+            (element.album?.toLowerCase().contains(query) ?? false))
         .toList();
     songList.value = songlist;
   }
